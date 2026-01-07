@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🇹🇳 Jastip</title>
+  <title>By Anah</title>
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -31,7 +31,10 @@
       <div v-for="p in products" :key="p.id">
         <template v-if="p.type === 'ad'">
           <!-- Ad card: full image, 320x320px -->
-          <div class="bg-white rounded-lg overflow-hidden shadow-sm flex flex-col h-80 p-0">
+          <div
+            class="bg-white rounded-lg overflow-hidden shadow-sm flex flex-col h-80 p-0 cursor-pointer"
+            @click="openDetailById(p.productId);"
+          >
             <img
               :src="p.image"
               class="w-full h-full object-cover"
@@ -86,11 +89,13 @@
     <button @click="page='list'" class="text-sm mb-3">← Back</button>
 
     <div class="relative mb-3">
-      <img :src="selected.image" class="w-full h-48 object-cover rounded">
+      <div class="flex justify-center mb-3">
+        <img :src="selected.image" class="w-80 h-80 object-cover rounded">
+      </div>
       <img
         src="https://img.icons8.com/?size=48&id=6KiDYP2M5aXT&format=png"
         alt="Hot"
-        class="absolute -top-2 -left-2 w-9 h-9"
+        class="absolute -bottom-2 right-8 w-9 h-9"
         style="z-index:2"
       >
     </div>
@@ -232,14 +237,21 @@ createApp({
           deskripsi: 'Saus cabai tradisional Tunisia.',
           price: 25000
         },
-        // Ad product
         {
           id: 'ad-1',
           type: 'ad',
-          image: 'https://dummyimage.com/202x320/eee/333&text=AD',
+          image: 'https://github.com/z-anah/jastip/blob/main/src/img/pack-1-ad.png?raw=true',
           title: 'Sponsored',
-          link: 'https://www.example.com'
-        }
+          link: 'https://www.example.com',
+          productId: 4
+        },
+        {
+          id: 4,
+          name: 'Pack 1 ramadan: kurma, almond, pistachio',
+          image: 'https://github.com/z-anah/jastip/blob/main/src/img/pack-1.png?raw=true',
+          deskripsi: 'Paket hemat berisi 100 g kurma, 100 g almond, dan 100 g pistachio.',
+          price: 60000
+        },
       ]
     }
   },
@@ -252,6 +264,12 @@ createApp({
     openDetail(p) {
       this.selected = p
       this.page = 'detail'
+    },
+    openDetailById(id) {
+      const product = this.products.find(p => p.id == id && !p.type)
+      if (product) {
+        this.openDetail(product)
+      }
     },
     addToCart(p) {
       const existing = this.cart.find(item => item.product.id === p.id)
