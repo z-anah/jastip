@@ -10,8 +10,7 @@
   <meta property="og:image" content="https://github.com/z-anah/jastip/blob/main/src/img/thumbnail.png?raw=true" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Paket Jastip Tunisia" />
-  <meta property="og:url" content="https://yourdomain.com/" />
+  <meta property="og:image:alt" content="Open Jastip Tunisia" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Jastip Tunisia oleh Anah" />
   <meta property="og:locale" content="id_ID" />
@@ -560,16 +559,19 @@ Minyak zaitun extra virgin dengan rasa lembut, cocok untuk berbagai masakan.
       }
     },
     sendWhatsapp() {
-      if (this.cart.length === 0) return
+      if (this.cart.length === 0) return;
 
       const text = this.cart
-        .map((item, i) => `${i + 1}. ${item.product.name} x${item.quantity}`)
-        .join('%0A')
+        .map((item, i) =>
+          `${i + 1}. ${item.product.name} (Rp${item.product.price.toLocaleString()} x ${item.quantity})`
+        )
+        .join('%0A');
 
-      const phone = '6287772897512' // ganti nomor WA
-      const url = `https://wa.me/${phone}?text=Order%20Jastip:%0A${text}`
+      const total = this.totalPrice.toLocaleString();
+      const phone = '6287772897512'; // ganti nomor WA
+      const url = `https://wa.me/${phone}?text=Order%20Jastip:%0A${text}%0A%0ATotal:%20Rp${total}`;
 
-      window.open(url, '_blank')
+      window.open(url, '_blank');
     },
     getCartQuantity(p) {
       const item = this.cart.find(item => item.product.id === p.id)
