@@ -263,7 +263,7 @@
     <p class="text-xs text-gray-500 mb-1">Hubungi WhatsApp untuk pertanyaan lebih lanjut.</p>
     </div>
     <button
-      @click="shareToWhatsapp"
+      @click="copyTo"
       class="w-full bg-black text-white py-2 rounded flex items-center justify-center gap-2"
       type="button"
     >
@@ -592,30 +592,34 @@ Minyak zaitun extra virgin dengan rasa lembut, cocok untuk berbagai masakan.
         ? 'text-blue-600 font-semibold'
         : 'text-gray-500'
     },
-    shareToWhatsapp() {
+    copyTo() {
       const siteUrl = window.location.href;
       const produkList = this.products
         .filter(p => !p.type || p.type !== 'ad')
-        .slice(2, 8)
+        .slice(0, 4)
         .map(p => `• ${p.name} \`\`\`(Rp${p.price.toLocaleString()})\`\`\``)
         .join('%0A');
 
       const keunggulan = [
         '• Produk asli Tunisia',
         '• Langsung dikirim dari Tunisia ke Indonesia',
-        '• Kualitas premium, segar dan terjamin',
+        '• Kualitas premium, segar & terjamin',
         '• Jastip personal, bisa tanya-tanya langsung via WhatsApp',
         '• Harga bersaing, transparan tanpa biaya tersembunyi'
       ].join('%0A');
 
       const text =
-        `*Jastip Tunisia by Anah*%0A%0A` +
+        `*Persiapan Ramadan dari sekarang 🌙*%0A` +
+        `Ramadan akan tiba — yuk mulai belanja camilan sehat & oleh-oleh khas Tunisia bersama *Jastip Anah*.%0A%0A` +
         `*Daftar produk tersedia:*%0A${produkList}%0A%0A` +
         `*Kenapa beda?*%0A${keunggulan}%0A%0A` +
-        `*Lihat detail dan order di sini:*%0A• ${encodeURIComponent(siteUrl)}`;
+        `Klik di bawah untuk lihat detail & order 👇%0A• ${encodeURIComponent(siteUrl)}`;
 
-      const url = `https://wa.me/?text=${text}`;
-      window.open(url, '_blank');
+      // copy to clipboard
+      navigator.clipboard.writeText(decodeURIComponent(text)).then(() => {
+        alert('Teks informasi Jastip berhasil disalin ke clipboard. Silakan tempel di WhatsApp Anda.');
+      });
+      
     },
   }
 }).mount('#app')
