@@ -3,6 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Jastip Tunisia oleh Anah" />
+  <meta property="og:description" content="Jastip produk asli Tunisia, langsung kirim ke Indonesia. Cek daftar produk dan order di sini!" />
+  <meta property="og:image" content="https://github.com/z-anah/jastip/blob/main/src/img/thumbnail.png?raw=true" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Paket Jastip Tunisia" />
+  <meta property="og:url" content="https://yourdomain.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Jastip Tunisia oleh Anah" />
+  <meta property="og:locale" content="id_ID" />
   <title>By Anah</title>
 
   <!-- Tailwind CDN -->
@@ -10,22 +22,65 @@
 
   <!-- Vue 3 CDN -->
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <!-- ...existing code... -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
+
+<style>
+  /* Markdown styles for easy reading */
+  .markdown-body h1, .markdown-body h2, .markdown-body h3 {
+    font-weight: 600;
+    margin-top: 1.2em;
+    margin-bottom: 0.5em;
+  }
+  .markdown-body p {
+    margin-bottom: 0.8em;
+    line-height: 1.7;
+  }
+  .markdown-body ul, .markdown-body ol {
+    margin-left: 1.2em;
+    margin-bottom: 0.8em;
+  }
+  .markdown-body li {
+    margin-bottom: 0.3em;
+  }
+  .markdown-body blockquote {
+    border-left: 4px solid #d1d5db;
+    padding-left: 1em;
+    color: #374151;
+    background: #f9fafb;
+    margin: 1em 0;
+  }
+  .markdown-body strong {
+    font-weight: 600;
+    color: #111827;
+  }
+  .markdown-body em {
+    color: #374151;
+  }
+  .markdown-body hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 1.5em 0;
+  }
+</style>
 
 <body class="bg-gray-50 text-gray-800">
 <div id="app" class="max-w-md mx-auto p-4">
 
   <!-- HEADER -->
-  <header class="mb-4 flex justify-between items-center">
-    <h1 class="text-lg font-semibold">🇹🇳 Jastip</h1>
+   <header class="mb-4 flex justify-between items-center">
+    <h1 class="text-lg font-semibold">By Anah
+    </h1>
     <button @click="page='cart'" class="text-sm flex items-center gap-1">
-      <img src="https://img.icons8.com/?size=64&id=y21Zo14Go4LV&format=png" alt="Cart" class="w-5 h-5">
+      <img src="https://img.icons8.com/?size=64&id=y21Zo14Go4LV&format=png" alt="Keranjang" class="w-5 h-5">
       ({{ cart.length }})
     </button>
   </header>
 
   <!-- LIST PAGE -->
-  <div v-if="page === 'list'">
+  <div v-if="page === 'list'" class="mb-24">
     <div class="grid grid-cols-2 gap-3">
       <!-- Product cards -->
       <div v-for="p in products" :key="p.id">
@@ -74,7 +129,7 @@
                   class="text-xs bg-black text-white px-3 py-1 rounded"
                   @click="addToCart(p)"
                 >
-                  Add
+                  Tambah
                 </button>
               </div>
             </div>
@@ -85,9 +140,7 @@
   </div>
 
   <!-- DETAIL PAGE -->
-  <div v-if="page === 'detail' && selected">
-    <button @click="page='list'" class="text-sm mb-3">← Back</button>
-
+  <div v-if="page === 'detail' && selected" class="mb-24">
     <div class="relative mb-3">
       <div class="flex justify-center mb-3">
         <img :src="selected.image" class="w-80 h-80 object-cover rounded">
@@ -114,20 +167,26 @@
         class="text-xs bg-black text-white px-2 py-1 rounded"
         @click="addToCart(selected)"
       >
-        Add
+        Tambah
       </button>
     </div>
     
-    <p class="text-sm text-gray-600 mb-4">
-      {{ selected.deskripsi }}
-    </p>
+    <div class="text-sm mb-4 markdown-body" v-html="renderMarkdown(selected.deskripsi)"></div>
+
+
+    <div class="flex items-center gap-1 justify-end mb-4">
+      <button
+        class="text-xs bg-black text-white px-2 py-1 rounded"
+        @click="page='list'"
+      >
+        Kembali
+      </button>
+    </div>
   </div>
 
   <!-- CART PAGE -->
-  <div v-if="page === 'cart'">
-    <button @click="page='list'" class="text-sm mb-3">← Back</button>
-
-    <h2 class="font-semibold mb-2">Cart</h2>
+  <div v-if="page === 'cart'" class="mb-24">
+    <h2 class="font-semibold mb-2">Keranjang</h2>
 
     <table class="w-full text-sm bg-white rounded-lg overflow-hidden mb-4">
       <tr v-for="(item, i) in cart" :key="i" class="border-b">
@@ -147,7 +206,7 @@
         </td>
       </tr>
       <tr v-if="cart.length === 0">
-        <td colspan="3" class="text-center p-4 text-gray-400">Cart is empty</td>
+        <td colspan="3" class="text-center p-4 text-gray-400">Keranjang kosong</td>
       </tr>
     </table>
     <div class="text-right font-semibold mb-2">
@@ -157,34 +216,45 @@
 
     <button
       @click="sendWhatsapp"
-      class="w-full bg-black text-green-600 py-2 rounded flex items-center justify-center gap-2"
+      class="w-full bg-black text-white py-2 rounded flex items-center justify-center gap-2"
       type="button"
     >
       <img src="https://img.icons8.com/?size=64&id=Fr3lHZpaL8k5&format=png" alt="WhatsApp" class="w-5 h-5">
-      Order via WhatsApp
+      Pesan via WhatsApp
     </button>
+    <!-- back button like pesan button -->
+    <div class="w-full bg-black text-green-600 py-2 rounded flex items-center justify-center gap-2 mt-2">
+      <button
+        @click="page='list'"
+        class="w-full text-white"
+        type="button"
+      >
+        Kembali
+      </button>
+
+    </div>
   </div>
 
   <!-- NAVIGATION BAR -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around items-center py-2 z-10 max-w-md mx-auto">
     <button @click="page='list'" :class="navClass('list')" class="flex flex-col items-center text-xs">
-      <img src="https://img.icons8.com/?size=64&id=PmSC86guKh6C&format=png" alt="List" class="w-6 h-6 mb-1">
-      List
+      <img src="https://img.icons8.com/?size=64&id=PmSC86guKh6C&format=png" alt="Daftar" class="w-6 h-6 mb-1">
+      Daftar
     </button>
     <button @click="page='cart'" :class="navClass('cart')" class="flex flex-col items-center text-xs">
-      <img src="https://img.icons8.com/?size=64&id=y21Zo14Go4LV&format=png" alt="Cart" class="w-6 h-6 mb-1">
-      Cart
+      <img src="https://img.icons8.com/?size=64&id=y21Zo14Go4LV&format=png" alt="Keranjang" class="w-6 h-6 mb-1">
+      Keranjang
     </button>
     <button @click="page='info'" :class="navClass('info')" class="flex flex-col items-center text-xs">
-      <img src="https://img.icons8.com/?size=64&id=zyt9WZ3jEcGG&format=png" alt="Info" class="w-6 h-6 mb-1">
-      Info
+      <img src="https://img.icons8.com/?size=64&id=zyt9WZ3jEcGG&format=png" alt="Informasi" class="w-6 h-6 mb-1">
+      Informasi
     </button>
   </nav>
 
   <!-- INFO JASTIP PAGE -->
   <div v-if="page === 'info'">
     <div class="bg-white rounded-lg p-4 mb-4">
-    <h2 class="text-lg font-semibold mb-2">Info Jastip Tunisia</h2>
+    <h2 class="text-lg font-semibold mb-2">Informasi Jastip Tunisia</h2>
     <ul class="text-sm text-gray-700 list-disc pl-5 mb-2">
       <li>Jastip oleh Anah, tinggal di Tunisia 🇹🇳</li>
       <li>Produk asli Tunisia, dikirim ke Indonesia</li>
@@ -195,11 +265,11 @@
     </div>
     <button
       @click="shareToWhatsapp"
-      class="w-full bg-black text-green-600 py-2 rounded flex items-center justify-center gap-2"
+      class="w-full bg-black text-white py-2 rounded flex items-center justify-center gap-2"
       type="button"
     >
       <img src="https://img.icons8.com/?size=64&id=Fr3lHZpaL8k5&format=png" alt="WhatsApp" class="w-5 h-5">
-      Share to WhatsApp
+      Bagikan Jastip ke WhatsApp
     </button>
   </div>
 
@@ -220,22 +290,85 @@ createApp({
           id: 1,
           name: 'Pistachio asin bercangkang 100 g',
           image: 'https://www.carrefour.tn/media/catalog/product/2/8/2828991000000-1.webp?auto=webp&format=pjpg&width=2560&height=3200&fit=cover',
-          deskripsi: 'Kue semolina isi kurma khas Tunisia.',
-          price: 35000
+          deskripsi: `
+## Pistachio Tunisia Asli
+
+Nikmati **kacang pistachio premium** dari Tunisia, terkenal dengan rasa gurih dan tekstur renyahnya.
+
+### Detail Produk
+- Berat: **100g**
+- Dikemas utuh dengan cangkang
+- Rasa asin alami, tanpa bahan pengawet
+
+### Manfaat
+- Sumber protein & serat
+- Kaya antioksidan
+- Camilan sehat untuk keluarga
+
+### Cocok Untuk
+- Teman minum teh/kopi
+- Camilan saat bekerja atau belajar
+- Oleh-oleh khas Tunisia
+
+> Pistachio Tunisia dipanen langsung dari kebun lokal, dijamin segar dan berkualitas!
+
+---
+
+*Stok terbatas, segera pesan sebelum kehabisan!*
+`,
+          price: 67000
         },
         {
           id: 2,
           name: 'Inti kenari kualitas ekstra 100 g',
           image: 'https://www.carrefour.tn/media/catalog/product/2/8/2824833000000.webp',
-          deskripsi: 'Kue almond premium khas Tunisia.',
-          price: 45000
+          deskripsi: `
+## Kenari Tunisia Kualitas Ekstra
+Rasakan kenikmatan **inti kenari premium** dari Tunisia, pilihan tepat untuk camilan sehat dan bergizi.
+### Detail Produk
+- Berat: **100g**
+- Hanya inti kenari, tanpa cangkang
+- Kualitas ekstra, rasa lezat dan tekstur renyah
+### Manfaat
+- Sumber asam lemak omega-3
+- Kaya protein & serat
+- Mendukung kesehatan jantung & otak
+### Cocok Untuk
+- Campuran salad & yogurt
+- Bahan kue & roti
+- Camilan sehat sehari-hari
+
+> Kenari Tunisia dipanen dari pohon terbaik, dijamin segar dan berkualitas tinggi!
+---
+*Stok terbatas, segera pesan sebelum kehabisan!*
+`,
+          price: 27000
         },
         {
           id: 3,
           name: 'Kacang almond 100 g',
           image: 'https://www.carrefour.tn/media/catalog/product/2/8/2828194000000.webp?auto=webp&format=pjpg&width=2560&height=3200&fit=cover',
-          deskripsi: 'Saus cabai tradisional Tunisia.',
-          price: 25000
+          deskripsi: `
+## Almond Tunisia Asli
+Nikmati **kacang almond premium** dari Tunisia, terkenal dengan rasa lezat dan tekstur renyahnya.
+### Detail Produk
+- Berat: **100g**
+- Kacang almond utuh, tanpa kulit
+- Rasa alami, tanpa tambahan garam atau gula
+### Manfaat
+- Sumber vitamin E & magnesium
+- Kaya protein & serat
+- Mendukung kesehatan jantung & kulit
+### Cocok Untuk
+- Camilan sehat sehari-hari
+- Campuran salad & oatmeal
+- Bahan kue & roti
+
+> Almond Tunisia dipanen dari kebun lokal, dijamin segar dan berkualitas tinggi!
+---
+*Stok terbatas, segera pesan sebelum kehabisan!*
+`,
+          price: 32000
         },
         {
           id: 'ad-1',
@@ -249,9 +382,143 @@ createApp({
           id: 4,
           name: 'Pack 1 ramadan: kurma, almond, pistachio',
           image: 'https://github.com/z-anah/jastip/blob/main/src/img/pack-1.png?raw=true',
-          deskripsi: 'Paket hemat berisi 100 g kurma, 100 g almond, dan 100 g pistachio.',
+          deskripsi: `
+## Pack Ramadan Spesial 1
+Nikmati paket camilan sehat khas Ramadan dari Tunisia, terdiri dari:
+- **Kurma Deglet Nour 250g**: Manis alami, kaya serat & energi
+- **Almond 100g**: Sumber vitamin E & protein
+- **Pistachio 100g**: Rasa gurih, kaya antioksidan
+
+### Manfaat
+- Camilan sehat untuk berbuka & sahur
+- Sumber energi alami
+### Cocok Untuk
+- Keluarga & teman saat Ramadan
+- Oleh-oleh khas Tunisia
+
+> Semua produk dipilih langsung dari Tunisia, dijamin segar dan berkualitas tinggi!
+---
+*Stok terbatas, segera pesan sebelum kehabisan!*
+`,
           price: 60000
         },
+        {
+          id: 5,
+          name: 'Kurma bertangkai dalam kemasan tray',
+          image: 'https://www.carrefour.tn/media/catalog/product/6/1/6191567000092_3.webp?auto=webp&format=pjpg&width=2560&height=3200&fit=cover',
+          deskripsi: `
+## Kurma Bertangkai Tunisia
+
+Kurma bertangkai segar dalam kemasan tray, cocok untuk oleh-oleh dan camilan sehat.
+
+### Detail Produk
+- Berat: Sesuai kemasan
+- Kurma bertangkai, rasa manis alami
+- Dikemas praktis dan higienis
+
+### Manfaat
+- Sumber energi alami
+- Kaya serat dan vitamin
+
+### Cocok Untuk
+- Camilan keluarga
+- Oleh-oleh khas Tunisia
+
+> Kurma dipanen langsung dari kebun Tunisia, segar dan berkualitas!`,
+          price: 85000
+        },
+        {
+          id: 6,
+          name: 'Minyak zaitun extra virgin 500 ml',
+          image: 'https://www.carrefour.tn/media/catalog/product/6/1/6191598700923-1.webp',
+          deskripsi: `
+## Minyak Zaitun Extra Virgin 500ml
+
+Minyak zaitun asli Tunisia, kualitas extra virgin, cocok untuk masakan dan salad.
+
+### Detail Produk
+- Isi: 500ml
+- Extra virgin, rasa khas Tunisia
+- Tanpa bahan pengawet
+
+### Manfaat
+- Menjaga kesehatan jantung
+- Kaya antioksidan
+
+### Cocok Untuk
+- Salad, masakan, dan roti
+
+> Minyak zaitun diproses alami dari kebun Tunisia!`,
+          price: 0,
+          link: 'https://www.carrefour.tn/huile-dolive-extra-vierge-6191598700923.html',
+        },
+        {
+          id: 7,
+          name: 'Minyak zaitun extra virgin 250 ml',
+          image: 'https://www.carrefour.tn/media/catalog/product/6/1/6191598701098-1_2.webp',
+          deskripsi: `
+## Minyak Zaitun Extra Virgin 250ml
+
+Minyak zaitun asli Tunisia, kualitas extra virgin, cocok untuk masakan dan salad.
+
+### Detail Produk
+- Isi: 250ml
+- Extra virgin, rasa khas Tunisia
+
+### Manfaat
+- Menjaga kesehatan jantung
+- Kaya antioksidan
+
+### Cocok Untuk
+- Salad, masakan, dan roti
+
+> Minyak zaitun diproses alami dari kebun Tunisia!`,
+          price: 0
+        },
+        {
+          id: 8,
+          name: 'Minyak zaitun extra virgin rasa lembut 1l',
+          image: 'https://www.carrefour.tn/media/catalog/product/6/1/6191598700732_1.webp?auto=webp&format=pjpg&width=2560&height=3200&fit=cover',
+          deskripsi: `
+## Minyak Zaitun Extra Virgin Rasa Lembut 1L
+
+Minyak zaitun extra virgin dengan rasa lembut, cocok untuk berbagai masakan.
+
+### Detail Produk
+- Isi: 1 liter
+- Extra virgin, rasa lembut
+
+### Manfaat
+- Menjaga kesehatan jantung
+- Kaya antioksidan
+
+### Cocok Untuk
+- Salad, masakan, dan roti
+
+> Minyak zaitun diproses alami dari kebun Tunisia!`,
+          price: 0
+        },
+        // {
+        //   id: 9,
+        //   name: 'xxx',
+        //   image: 'xxx',
+        //   deskripsi: `xxx`,
+        //   price: 0
+        // },
+        // {
+        //   id: 10,
+        //   name: 'xxx',
+        //   image: 'xxx',
+        //   deskripsi: `xxx`,
+        //   price: 0
+        // },
+        // {
+        //   id: 100,
+        //   name: 'xxx',
+        //   image: 'xxx',
+        //   deskripsi: `xxx`,
+        //   price: 0
+        // },
       ]
     }
   },
@@ -261,6 +528,9 @@ createApp({
     }
   },
   methods: {
+    renderMarkdown(text) {
+      return marked.parse(text || '');
+    },
     openDetail(p) {
       this.selected = p
       this.page = 'detail'
@@ -322,13 +592,26 @@ createApp({
     },
     shareToWhatsapp() {
       const siteUrl = window.location.href;
-      const preview = this.products
-        .map(p => `• ${p.name}`)
+      const produkList = this.products
+        .filter(p => !p.type || p.type !== 'ad')
+        .slice(2, 8)
+        .map(p => `• ${p.name} \`\`\`(Rp${p.price.toLocaleString()})\`\`\``)
         .join('%0A');
+
+      const keunggulan = [
+        '• Produk asli Tunisia',
+        '• Langsung dikirim dari Tunisia ke Indonesia',
+        '• Kualitas premium, segar dan terjamin',
+        '• Jastip personal, bisa tanya-tanya langsung via WhatsApp',
+        '• Harga bersaing, transparan tanpa biaya tersembunyi'
+      ].join('%0A');
+
       const text =
-        `Jastip Tunisia 🇹🇳%0A%0A` +
-        `Available products:%0A${preview}%0A%0A` +
-        `See more here 👇%0A${encodeURIComponent(siteUrl)}`;
+        `*Jastip Tunisia by Anah*%0A%0A` +
+        `*Daftar produk tersedia:*%0A${produkList}%0A%0A` +
+        `*Kenapa beda?*%0A${keunggulan}%0A%0A` +
+        `*Lihat detail dan order di sini:*%0A• ${encodeURIComponent(siteUrl)}`;
+
       const url = `https://wa.me/?text=${text}`;
       window.open(url, '_blank');
     },

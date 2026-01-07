@@ -1,0 +1,40 @@
+<div v-if="page === 'cart'" class="mb-24">
+    <button @click="page='list'" class="text-sm mb-3">← Kembali</button>
+
+    <h2 class="font-semibold mb-2">Keranjang</h2>
+
+    <table class="w-full text-sm bg-white rounded-lg overflow-hidden mb-4">
+      <tr v-for="(item, i) in cart" :key="i" class="border-b">
+        <td class="p-2">
+          <img :src="item.product.image" class="w-14 h-14 object-cover rounded">
+        </td>
+        <td class="p-2">
+          <p class="font-medium">{{ item.product.name }}</p>
+          <p class="text-xs text-gray-500">Rp{{ item.product.price.toLocaleString() }}</p>
+        </td>
+        <td class="p-2 text-right">
+          <div class="flex items-center gap-1 justify-end">
+            <button @click="decreaseQuantity(i)" class="px-2">−</button>
+            <span class="px-1">{{ item.quantity }}</span>
+            <button @click="increaseQuantity(i)" class="px-2">+</button>
+          </div>
+        </td>
+      </tr>
+      <tr v-if="cart.length === 0">
+        <td colspan="3" class="text-center p-4 text-gray-400">Keranjang kosong</td>
+      </tr>
+    </table>
+    <div class="text-right font-semibold mb-2">
+      Total: Rp{{ totalPrice.toLocaleString() }}
+    </div>
+
+
+    <button
+      @click="sendWhatsapp"
+      class="w-full bg-black text-green-600 py-2 rounded flex items-center justify-center gap-2"
+      type="button"
+    >
+      <img src="https://img.icons8.com/?size=64&id=Fr3lHZpaL8k5&format=png" alt="WhatsApp" class="w-5 h-5">
+      Pesan via WhatsApp
+    </button>
+  </div>
