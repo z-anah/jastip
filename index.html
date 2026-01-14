@@ -82,7 +82,7 @@
   <div v-if="page === 'list'" class="mb-24">
     <div class="grid grid-cols-2 gap-3">
       <!-- Product cards -->
-      <div v-for="p in products" :key="p.id">
+      <div v-for="p in products.slice().reverse()" :key="p.id">
         <template v-if="p.type === 'ad'">
           <!-- Ad card: full image, 320x320px -->
           <div
@@ -528,12 +528,12 @@ Nikmati paket camilan sehat khas Ramadan dari Tunisia, terdiri dari:
         // 14; Graines de citrouille éclatées; 100g; Rp 38.867
         {
           id: 10,
-          name: 'Buah Ara Kering (Figue séchée) 300g',
+          name: 'Buah Ara Kering 300g',
           image: 'https://raw.githubusercontent.com/z-anah/jastip/main/src/img/10.webp',
           deskripsi: `
         ## Buah Ara Kering Tunisia 300g
 
-        Buah ara kering (figue séchée) asli Tunisia, manis alami dan kaya serat.
+        Buah ara kering asli Tunisia, manis alami dan kaya serat.
 
         ### Detail Produk
         - Berat: **300g**
@@ -561,7 +561,7 @@ Nikmati paket camilan sehat khas Ramadan dari Tunisia, terdiri dari:
           deskripsi: `
         ## Kacang Mede Panggang Asin 65g
 
-        Kacang mede (noix de cajou) panggang dan asin, renyah dan gurih.
+        Kacang mede panggang dan asin, renyah dan gurih.
 
         ### Detail Produk
         - Berat: **65g**
@@ -589,7 +589,7 @@ Nikmati paket camilan sehat khas Ramadan dari Tunisia, terdiri dari:
           deskripsi: `
         ## Pistachio Panggang Asin 70g
 
-        Pistachio Tunisia dipanggang dan diberi garam, rasa gurih & renyah.
+        Pistachio panggang dan asin, rasa gurih & renyah.
 
         ### Detail Produk
         - Berat: **70g**
@@ -617,7 +617,7 @@ Nikmati paket camilan sehat khas Ramadan dari Tunisia, terdiri dari:
           deskripsi: `
         ## Almond Panggang Asin 70g
 
-        Kacang almond Tunisia dipanggang dan asin, gurih & renyah.
+        Kacang almond panggang dan asin, gurih & renyah.
 
         ### Detail Produk
         - Berat: **70g**
@@ -640,12 +640,12 @@ Nikmati paket camilan sehat khas Ramadan dari Tunisia, terdiri dari:
         },
         {
           id: 14,
-          name: 'Biji Labu Panggang (Graines de citrouille) 100g',
+          name: 'Biji Labu Panggang 100g',
           image: 'https://raw.githubusercontent.com/z-anah/jastip/main/src/img/14.webp',
           deskripsi: `
         ## Biji Labu Panggang 100g
 
-        Biji labu (graines de citrouille) panggang, gurih & kaya nutrisi.
+        Biji labu panggang, gurih & kaya nutrisi.
 
         ### Detail Produk
         - Berat: **100g**
